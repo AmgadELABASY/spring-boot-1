@@ -1,0 +1,62 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Employees</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/picnic">
+</head>
+<body>
+
+
+<table>
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Adress</th>
+        <th>Fonction</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="employee : ${employees}" th:style="'background: '+ ${employee.fonction.getCodeCouleur()} ">
+        <td th:text="${employee.id}"></td>
+        <td th:text="${employee.name}"></td>
+        <td th:text="${employee.email}"></td>
+        <td th:text="${employee.phone}"></td>
+        <td th:text="${employee.address}"></td>
+        <td th:text="${employee.fonction}"></td>
+
+    </tr>
+    </tbody>
+</table><br>
+
+    <form th:action="@{/addemployee}" th:object="${employee}" method="post">
+        <label for="id">id : </label>
+        <input type="text" th:field="*{id}"><br><br>
+
+        <label for="name">name : </label>
+        <input type="text" th:field="*{name}"><br><br>
+
+        <label for="email">email : </label>
+        <input type="email" th:field="*{email}"><br><br>
+
+        <label for="phone">phone : </label>
+        <input type="text" th:field="*{phone}"><br><br>
+
+        <label for="address">address : </label>
+        <input type="text" th:field="*{address}"><br><br>
+
+        <label for="fonction">fonction : </label>
+        <select th:field="*{fonction}">
+            <option th:each="fonction : ${T(com.example.demo.enums.Fonction).values()}"
+                    th:value="${fonction}" th:text="${fonction}">
+
+            </option>
+        </select>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
