@@ -1,0 +1,42 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Employees</title>
+</head>
+<body>
+<ul th:each="employee : ${employees}" th:style="'width:15vw; background: '+ ${employee.fonction.getCodeCouleur()}">
+
+    <li th:style="'font-size:25px;'">
+        <a th:href="@{/employee/{id}(id=${employee.id})}" th:text="${employee.id}"></a>
+        <span th:text="${employee.name}"></span>
+    </li>
+</ul>
+
+    <form th:action="@{/employee/addemployee}" th:object="${employee}" method="post">
+
+        <label for="name">Nom : </label>
+        <input type="text" th:field="*{name}"><br>
+
+        <label for="address">Addresse : </label>
+        <input type="text" th:field="*{address}"><br>
+
+        <label for="email">Courriel : </label>
+        <input type="email" th:field="*{email}"><br>
+
+        <label for="phone">Tél : </label>
+        <input type="text" th:field="*{phone}"><br>
+
+
+        <label for="fonction">Fonction : </label>
+        <select th:field="*{fonction}">
+            <option th:each="fonction : ${T(com.example.demo.enums.Fonction).values()}"
+                    th:value="${fonction}" th:text="${fonction}">
+
+            </option>
+        </select><br>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

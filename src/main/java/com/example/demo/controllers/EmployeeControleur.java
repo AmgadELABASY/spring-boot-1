@@ -5,28 +5,44 @@ import com.example.demo.dao.IEmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
-public class EmployeeControleur {
+@RequestMapping("/employee")
+public class EmployeeControleur implements IEmployeController {
 
     @Autowired
     private IEmployeeRepository employeeRepository;
 
-    @GetMapping("/findAllEmployee")
-    public String findAllEmployee(Model model) {
+    @GetMapping("/home")
+    public String displayHome(Model model) {
        List<Employee>  employees = (List<Employee>) employeeRepository.findAll();
        model.addAttribute("employees", employees);
        model.addAttribute("employee",new Employee());
-        return "view_employees";
+        return "view_home";
     }
     @PostMapping("/addemployee")
-    public String addEmployee(@ModelAttribute Employee employee, Model model){
+    public String addEmployee(@ModelAttribute Employee employee){
         employeeRepository.save(employee);
-        return "redirect:/findAllEmployee";
+        return "redirect:/employee/home";
     }
+
+    @Override
+    @RequestMapping(value = "/{id}")
+    public String displayEmployee(@PathVariable(name = "id") Long id, Model model) {
+        Optional<Employee> employeeOptional = employeeRepository.findById(id);
+        if(employeeOptional.isPresent()){
+            Employee employee = employeeOptional.get();
+            model.addAttribute("employee",employee);
+            return "view_employee";
+        }else {
+            return "redirect:/employee/home";
+        }
+
+    }
+
+
 }
